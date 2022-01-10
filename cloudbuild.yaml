@@ -1,0 +1,17 @@
+steps:
+  - name: 'node:12'
+    entrypoint: yarn
+    args:
+      - install
+  - name: 'node:12'
+    entrypoint: yarn
+    args:
+      - run
+      - build
+  - name: 'gcr.io/classfunc-com/firebase'
+    args:
+      - deploy
+      - --only
+      - hosting
+      - --token
+      - ${_FIREBASE_TOKEN}
