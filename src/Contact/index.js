@@ -3,7 +3,7 @@ import { useGlobal } from 'reactn';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { Select } from 'antd';
 import TextField from '@material-ui/core/TextField';
 
@@ -60,7 +60,7 @@ const cholestasis = [
 function Account(props) {
   const classes = useStyles();
   const [user] = useGlobal('user');
-  const [info] = useGlobal('info');
+  const [adviceList] = useGlobal('adviceList');
   const [check, setCheck] = useState('')
   const history = useHistory();
   const [selectedOption, setSelectedOption] = useState("")
@@ -76,7 +76,6 @@ function Account(props) {
   const updateUser = () => {
 
   };
-  console.log(info, 'info');
 
   const handleOptionChange = (changeEvent) => {
     setSelectedOption(changeEvent.target.value)
@@ -85,126 +84,134 @@ function Account(props) {
 
   return (
     <div style={{ backgroundColor: '#f5f5f5', margin: 50 }}>
-      <TextField value={check}
-        // id="outlined-basic"
-                 onChange={event => {
-                   setCheck(event.target.value);
-                 }} variant="outlined" />
-      <Typography style={{textAlign: 'center', fontSize: 25}}>Bạn có thể đang mắc phải bệnh {check}. Bạn nên đi xét nghiệm thêm để có kết quả chính xác</Typography>
-      <Typography style={{textAlign: 'center', fontSize: 25}}>Dưới đây là 1 số xét nghiệm cần thiết để bạn tham khảo</Typography>
       {
-        check == 'diabetes' ?
-          <div>
-            {
-              diabetes.map((c, i) => (
-                <div style={{width: '60%', margin: 'auto'}}>
-                  <Typography style={{fontSize: 22}}>- {c}</Typography>
-                </div>
-              ))
-            }
-          </div>
+        adviceList?.length ?
+          adviceList.map((item,index) =>(
+            <Typography key={index}>{item.content}</Typography>
+          ))
           :
-          <div>
-            {
-              check == 'LiverFailure' ?
-                <div style={{width: '60%', margin: 'auto'}}>
-                  {
-                    LiverFailure.map((c, i) => (
-                      <div>
-                        <Typography style={{fontSize: 22}}>- {c}</Typography>
-                      </div>
-                    ))
-                  }
-                </div>
-                :
-                <div>
-                  {
-                    check == 'hemolysis' ?
-                      <div style={{width: '60%', margin: 'auto'}}>
-                        {
-                          hemolysis.map((c, i) => (
-                            <div>
-                              <Typography style={{fontSize: 22}}>- {c}</Typography>
-                            </div>
-                          ))
-                        }
-                      </div>
-                      :
-                      <div>
-                        {
-                          check == 'jaundice' ?
-                            <div style={{width: '60%', margin: 'auto'}}>
-                              {
-                                jaundice.map((c, i) => (
-                                  <div>
-                                    <Typography style={{fontSize: 22}}>- {c}</Typography>
-                                  </div>
-                                ))
-                              }
-                            </div>
-                            :
-                            <div>
-                              {
-                                check == 'KidneyStones' ?
-                                  <div style={{width: '60%', margin: 'auto'}}>
-                                    {
-                                      KidneyStones.map((c, i) => (
-                                        <div>
-                                          <Typography style={{fontSize: 22}}>- {c}</Typography>
-                                        </div>
-                                      ))
-                                    }
-                                  </div>
-                                  :
-                                  <div>
-                                    {
-                                      check == 'CKD' ?
-                                        <div style={{width: '60%', margin: 'auto'}}>
-                                          {
-                                            CKD.map((c, i) => (
-                                              <div>
-                                                <Typography style={{fontSize: 22}}>- {c}</Typography>
-                                              </div>
-                                            ))
-                                          }
-                                        </div>
-                                        :
-                                        <div>
-                                          {
-                                            check == 'GOUT' ?
-                                              <div style={{width: '60%', margin: 'auto'}}>
-                                                {
-                                                  Gout.map((c, i) => (
-                                                    <div>
-                                                      <Typography style={{fontSize: 22}}>- {c}</Typography>
-                                                    </div>
-                                                  ))
-                                                }
-                                              </div>
-                                              :
-                                              <div style={{width: '60%', margin: 'auto'}}>
-                                                {
-                                                  cholestasis.map((c, i) => (
-                                                    <div>
-                                                      <Typography style={{fontSize: 22}}>- {c}</Typography>
-                                                    </div>
-                                                  ))
-                                                }
-                                              </div>
-                                          }
-                                        </div>
-                                    }
-                                  </div>
-                              }
-                            </div>
-                        }
-                      </div>
-                  }
-                </div>
-            }
-          </div>
+          <Typography>Khong co loi khuyen nao</Typography>
       }
-      <div style={{ display: 'flex', margin: '5% 10% 0 65%' }}>
+      {/*<TextField value={check}*/}
+      {/*  // id="outlined-basic"*/}
+      {/*           onChange={event => {*/}
+      {/*             setCheck(event.target.value);*/}
+      {/*           }} variant="outlined" />*/}
+      {/*<Typography style={{textAlign: 'center', fontSize: 25}}>Bạn có thể đang mắc phải bệnh {check}. Bạn nên đi xét nghiệm thêm để có kết quả chính xác</Typography>*/}
+      {/*<Typography style={{textAlign: 'center', fontSize: 25}}>Dưới đây là 1 số xét nghiệm cần thiết để bạn tham khảo</Typography>*/}
+      {/*{*/}
+      {/*  check == 'diabetes' ?*/}
+      {/*    <div>*/}
+      {/*      {*/}
+      {/*        diabetes.map((c, i) => (*/}
+      {/*          <div style={{width: '60%', margin: 'auto'}}>*/}
+      {/*            <Typography style={{fontSize: 22}}>- {c}</Typography>*/}
+      {/*          </div>*/}
+      {/*        ))*/}
+      {/*      }*/}
+      {/*    </div>*/}
+      {/*    :*/}
+      {/*    <div>*/}
+      {/*      {*/}
+      {/*        check == 'LiverFailure' ?*/}
+      {/*          <div style={{width: '60%', margin: 'auto'}}>*/}
+      {/*            {*/}
+      {/*              LiverFailure.map((c, i) => (*/}
+      {/*                <div>*/}
+      {/*                  <Typography style={{fontSize: 22}}>- {c}</Typography>*/}
+      {/*                </div>*/}
+      {/*              ))*/}
+      {/*            }*/}
+      {/*          </div>*/}
+      {/*          :*/}
+      {/*          <div>*/}
+      {/*            {*/}
+      {/*              check == 'hemolysis' ?*/}
+      {/*                <div style={{width: '60%', margin: 'auto'}}>*/}
+      {/*                  {*/}
+      {/*                    hemolysis.map((c, i) => (*/}
+      {/*                      <div>*/}
+      {/*                        <Typography style={{fontSize: 22}}>- {c}</Typography>*/}
+      {/*                      </div>*/}
+      {/*                    ))*/}
+      {/*                  }*/}
+      {/*                </div>*/}
+      {/*                :*/}
+      {/*                <div>*/}
+      {/*                  {*/}
+      {/*                    check == 'jaundice' ?*/}
+      {/*                      <div style={{width: '60%', margin: 'auto'}}>*/}
+      {/*                        {*/}
+      {/*                          jaundice.map((c, i) => (*/}
+      {/*                            <div>*/}
+      {/*                              <Typography style={{fontSize: 22}}>- {c}</Typography>*/}
+      {/*                            </div>*/}
+      {/*                          ))*/}
+      {/*                        }*/}
+      {/*                      </div>*/}
+      {/*                      :*/}
+      {/*                      <div>*/}
+      {/*                        {*/}
+      {/*                          check == 'KidneyStones' ?*/}
+      {/*                            <div style={{width: '60%', margin: 'auto'}}>*/}
+      {/*                              {*/}
+      {/*                                KidneyStones.map((c, i) => (*/}
+      {/*                                  <div>*/}
+      {/*                                    <Typography style={{fontSize: 22}}>- {c}</Typography>*/}
+      {/*                                  </div>*/}
+      {/*                                ))*/}
+      {/*                              }*/}
+      {/*                            </div>*/}
+      {/*                            :*/}
+      {/*                            <div>*/}
+      {/*                              {*/}
+      {/*                                check == 'CKD' ?*/}
+      {/*                                  <div style={{width: '60%', margin: 'auto'}}>*/}
+      {/*                                    {*/}
+      {/*                                      CKD.map((c, i) => (*/}
+      {/*                                        <div>*/}
+      {/*                                          <Typography style={{fontSize: 22}}>- {c}</Typography>*/}
+      {/*                                        </div>*/}
+      {/*                                      ))*/}
+      {/*                                    }*/}
+      {/*                                  </div>*/}
+      {/*                                  :*/}
+      {/*                                  <div>*/}
+      {/*                                    {*/}
+      {/*                                      check == 'GOUT' ?*/}
+      {/*                                        <div style={{width: '60%', margin: 'auto'}}>*/}
+      {/*                                          {*/}
+      {/*                                            Gout.map((c, i) => (*/}
+      {/*                                              <div>*/}
+      {/*                                                <Typography style={{fontSize: 22}}>- {c}</Typography>*/}
+      {/*                                              </div>*/}
+      {/*                                            ))*/}
+      {/*                                          }*/}
+      {/*                                        </div>*/}
+      {/*                                        :*/}
+      {/*                                        <div style={{width: '60%', margin: 'auto'}}>*/}
+      {/*                                          {*/}
+      {/*                                            cholestasis.map((c, i) => (*/}
+      {/*                                              <div>*/}
+      {/*                                                <Typography style={{fontSize: 22}}>- {c}</Typography>*/}
+      {/*                                              </div>*/}
+      {/*                                            ))*/}
+      {/*                                          }*/}
+      {/*                                        </div>*/}
+      {/*                                    }*/}
+      {/*                                  </div>*/}
+      {/*                              }*/}
+      {/*                            </div>*/}
+      {/*                        }*/}
+      {/*                      </div>*/}
+      {/*                  }*/}
+      {/*                </div>*/}
+      {/*            }*/}
+      {/*          </div>*/}
+      {/*      }*/}
+      {/*    </div>*/}
+      {/*}*/}
+      <div style={{ display: 'flex', justifyContent:'center'}}>
         <Button color="secondary" onClick={goHome}>
           Quay lại trang chủ
         </Button>

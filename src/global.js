@@ -7,4 +7,6 @@ addCallback(global => {
 setGlobal({
   user: {},
   info: [],
+  data:null,
+  adviceList:[]
 });

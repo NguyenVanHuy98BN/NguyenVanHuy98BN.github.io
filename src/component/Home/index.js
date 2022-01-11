@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
-import { useGlobal } from 'reactn';
+import { useGlobal, setGlobal } from 'reactn';
+
 import { Grid, InputAdornment, OutlinedInput } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { Select } from 'antd';
-
+import axios from 'axios'
 const { Option } = Select;
 
 const useStyles = makeStyles((theme) => ({
+  root:{
+    "& .MuiOutlinedInput-input":{
+      padding:10
+    }
+  },
   paper: {
     maxWidth: 800,
     margin: `${theme.spacing(5)}px auto`,
@@ -22,8 +28,38 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     margin: '20px auto',
   },
+  gridItem:{
+    display:'flex',
+    alignItems:'center'
+  },
+  actions:{
+    display:'flex',
+    justifyContent:'center',
+    marginTop:20
+  }
 }));
 
+const testData = {
+  'pathologyList': [
+    {
+      'id': 'PATHOLOGY001',
+      'name': 'Tiền tiểu đường',
+      'decription': 'Chắc chắn',
+    },
+  ],
+  'questionList': [
+    {
+      'id': 'QUESTION002',
+      'pathologyId': 'PATHOLOGY001, PATHOLOGY002, PATHOLOGY003, PATHOLOGY004',
+      'content': 'Trong gia đình có người bị bệnh tiểu đường',
+    },
+    {
+      'id': 'QUESTION003',
+      'pathologyId': 'PATHOLOGY001, PATHOLOGY002, PATHOLOGY003, PATHOLOGY004',
+      'content': 'Triệu chứng 4 nhiều: ăn nhiều, khát nhiều, gầy nhiều, tiểu nhiều',
+    },
+  ],
+};
 function Home(props) {
   const classes = useStyles();
   // const [user] = useGlobal('user');
@@ -43,6 +79,16 @@ function Home(props) {
   const [ure, setUre] = useState(null);
   const [creatinin, setCreatinin] = useState(null);
   const [acid, setAcid] = useState(null);
+  const [pregnant, setPregnant] = useState(false);
+  const [loading ,setLoading] = useState(false)
+  // const [userInfo, setUserInfo] = useState( [
+  //   {label :"", value: null, type: 'number',id:'age'},
+  //   {label :"", value: null,type: 'number',id:'height'},
+  //   {label :"", value: null,type: 'number',id:'weight'},
+  //   {label :"", value: null, type :'select', id:'sex',options:[{value:'male', label:'nam'},{value:'female', label:'nữ'}]},
+  //   {label :"", value: null,type :'select',id:'pregnant', options:[{value: true, label:'có'},{value:false, label:'không'}],condition:{sex:"female"}}
+  // ])
+  //
   const history = useHistory();
 
   const handleChange = (value) => {
@@ -50,44 +96,68 @@ function Home(props) {
     // console.log(`selected ${value}`);
   };
 
-  const updateUser = () => {
+  const updateUser = async () => {
     const user = {
-      age: age,
-      height: height,
-      weight: weight,
-      sex: sex,
-      glucose: glucose,
-      hbA1c: hbA1c,
-      bilirubinTT: bilirubinTT,
-      bilirubinTP: bilirubinTP,
-      ast: ast,
-      alt: alt,
-      alp: alp,
-      albumin: albumin,
-      ure: ure,
-      creatinin: creatinin,
-      acid: acid
+      age: Number(age || 0),
+      height: Number(height || 0),
+      weight: Number(weight || 0),
+      gender: Boolean(sex ),
+      glucose: Number(glucose || 0).toFixed(1),
+      hbA1c: Number(hbA1c).toFixed(1),
+      bilirubinTT:Number(bilirubinTT).toFixed(1) ,
+      bilirubinTP: Number(bilirubinTP).toFixed(1),
+      ast: Number(ast).toFixed(1),
+      alt: Number(alt).toFixed(1),
+      alp: Number(alp).toFixed(1),
+      albumin: Number(albumin).toFixed(1),
+      ure: Number(ure).toFixed(1),
+      creatinin: Number(creatinin).toFixed(1),
+      acid: Number(acid).toFixed(1)
     }
-    info.push(user)
-    history.push('/account');
+
+    try{
+      setLoading(true)
+
+      const { data } = await axios.post('http://localhost:8080/blood-biochemistry-test/first-process',user)
+      setGlobal({
+        data: data,
+        user
+      })
+
+      // info.push(user)
+      history.push('/account');
+    }catch (e){
+      console.log(e);
+    }finally {
+      setLoading(false)
+    }
+
   };
 
   return (
-    <div>
+    <div className={classes.root}>
       <h2 style={{ textAlign: 'center', fontSize: 30, marginTop: 50, marginBottom: 50 }}>Cập nhật thông tin Cá Nhân</h2>
-      <div className={classes.body}>
-        <Grid container wrap="nowrap">
+      <Grid container className={classes.body} spacing={2}>
+        <Grid item xs={12} sm={6} wrap="nowrap" className={classes.gridItem}>
           <Typography style={{ width: 120 }}>Tuổi</Typography>
           <TextField value={age}
-                     // id="outlined-basic"
+                     type="number"
+                     inputProps={{
+                       min:0
+                     }}
                      onChange={event => {
                        setAge(event.target.value);
                      }} variant="outlined" />
         </Grid>
-        <Grid container wrap="nowrap">
+        <Grid item xs={12} sm={6} wrap="nowrap" className={classes.gridItem}>
           <Typography style={{ width: 120 }}>Chiều cao</Typography>
           <OutlinedInput
+            // label={'Chiều cao'}
             value={height}
+            type="number"
+            inputProps={{
+              min:0
+            }}
             onChange={event => {
               setHeight(event.target.value);
             }}
@@ -95,19 +165,27 @@ function Home(props) {
             aria-describedby="outlined-weight-helper-text"
           />
         </Grid>
-      </div>
-      <div className={classes.body}>
-        <Grid container wrap="nowrap">
+        <Grid item xs={12} sm={6} wrap="nowrap" className={classes.gridItem}>
           <Typography style={{ width: 120 }}>Giới tính</Typography>
-          <Select style={{ width: 120 }} onChange={handleChange}>
+          <Select style={{ width: 120 }} value={sex} onChange={(value) =>{
+            if(value === 'male'){
+              setPregnant(false)
+            }
+            setSex(value)
+          }}>
             <Option value="male">Nam</Option>
             <Option value="female">Nữ</Option>
-            <Option value="different">Khác</Option>
           </Select>
         </Grid>
-        <Grid container wrap="nowrap">
+
+
+        <Grid item xs={12} sm={6} wrap="nowrap" className={classes.gridItem}>
           <Typography style={{ width: 120 }}>Cân nặng</Typography>
           <OutlinedInput
+            type="number"
+            inputProps={{
+              min:0
+            }}
             value={weight}
             onChange={event => {
               setWeight(event.target.value);
@@ -116,106 +194,154 @@ function Home(props) {
             aria-describedby="outlined-weight-helper-text"
           />
         </Grid>
-      </div>
-        <h3 style={{textAlign: 'center', fontSize: 22, marginTop: 40}}>Chỉ số sinh hóa</h3>
+      </Grid>
+
       <div className={classes.body}>
-        <Grid container wrap="nowrap">
+        {
+          sex === 'female' &&
+          <Grid container wrap="nowrap" className={classes.gridItem}>
+            <Typography style={{ width: 120 }}>Bạn có mang thai không ?</Typography>
+            <Select style={{ width: 120 }} value={pregnant} onChange={(value) =>setPregnant(value)}>
+              <Option value={true}> Có</Option>
+              <Option value={false}>Không</Option>
+            </Select>
+          </Grid>
+        }
+      </div>
+      <h3 style={{ textAlign: 'center', fontSize: 22, marginTop: 40 }}>Chỉ số sinh hóa</h3>
+      <Grid container className={classes.body} spacing={2}>
+        <Grid item xs={12} sm={4}  >
           <Typography style={{ width: 120 }}>Glucose</Typography>
           <TextField value={glucose}
+                     type="number"
+                     inputProps={{
+                       min:0
+                     }}
                      onChange={event => {
                        setGlucose(event.target.value);
                      }} variant="outlined" />
         </Grid>
-        <Grid container wrap="nowrap">
+        <Grid item xs={12} sm={4} >
           <Typography style={{ width: 120 }}>HbA1c</Typography>
           <TextField value={hbA1c}
+                     type="number"
+                     inputProps={{
+                       min:0
+                     }}
                      onChange={event => {
                        setHbA1c(event.target.value);
                      }} variant="outlined" />
         </Grid>
-        <Grid container wrap="nowrap">
+        <Grid item xs={12} sm={4} >
           <Typography style={{ width: 120 }}>Bilirubin TT</Typography>
           <TextField value={bilirubinTT}
+                     type="number"
+                     inputProps={{
+                       min:0
+                     }}
                      onChange={event => {
                        setBilirubinTT(event.target.value);
                      }} variant="outlined" />
         </Grid>
-      </div>
-      <div className={classes.body}>
-        <Grid container wrap="nowrap">
+      </Grid>
+      <Grid container className={classes.body} spacing={2}>
+        <Grid item xs={12} sm={4}>
           <Typography style={{ width: 120 }}>Bilirubin TP</Typography>
           <TextField value={bilirubinTP}
+                     type="number"
+                     inputProps={{
+                       min:0
+                     }}
                      onChange={event => {
                        setBilirubinTP(event.target.value);
                      }} variant="outlined" />
         </Grid>
-        <Grid container wrap="nowrap">
+        <Grid item xs={12} sm={4} spacing={2}>
           <Typography style={{ width: 120 }}>AST</Typography>
           <TextField value={ast}
+                     type="number"
+                     inputProps={{
+                       min:0
+                     }}
                      onChange={event => {
                        setAst(event.target.value);
                      }} variant="outlined" />
         </Grid>
-        <Grid container wrap="nowrap">
+        <Grid item xs={12} sm={4}>
           <Typography style={{ width: 120 }}>ALT</Typography>
           <TextField value={alt}
+                     type="number"
+                     inputProps={{
+                       min:0
+                     }}
                      onChange={event => {
                        setAlt(event.target.value);
                      }} variant="outlined" />
         </Grid>
-      </div>
-      <div className={classes.body}>
-        <Grid container wrap="nowrap">
+      </Grid>
+      <Grid container className={classes.body} spacing={2}>
+        <Grid item xs={12} sm={4}>
           <Typography style={{ width: 120 }}>Albumin</Typography>
           <TextField value={albumin}
+                     type="number"
+                     inputProps={{
+                       min:0
+                     }}
                      onChange={event => {
                        setAlbumin(event.target.value);
                      }} variant="outlined" />
         </Grid>
-        <Grid container wrap="nowrap">
+        <Grid item xs={12} sm={4}>
           <Typography style={{ width: 120 }}>ALP</Typography>
           <TextField value={alp}
+                     type="number"
+                     inputProps={{
+                       min:0
+                     }}
                      onChange={event => {
                        setAlp(event.target.value);
                      }} variant="outlined" />
         </Grid>
-        <Grid container wrap="nowrap">
+        <Grid item xs={12} sm={4}>
           <Typography style={{ width: 120 }}>URE</Typography>
           <TextField value={ure}
+                     type="number"
+                     inputProps={{
+                       min:0
+                     }}
                      onChange={event => {
                        setUre(event.target.value);
                      }} variant="outlined" />
         </Grid>
-      </div>
-      <div className={classes.body}>
-        <Grid container wrap="nowrap">
+      </Grid>
+      <Grid container className={classes.body} spacing={2}>
+        <Grid item xs={12} sm={4}>
           <Typography style={{ width: 120 }}>CREATININ</Typography>
           <TextField value={creatinin}
+                     type="number"
+                     inputProps={{
+                       min:0
+                     }}
                      onChange={event => {
                        setCreatinin(event.target.value);
                      }} variant="outlined" />
         </Grid>
-        <Grid container wrap="nowrap">
+        <Grid item xs={12} sm={4}>
           <Typography style={{ width: 120 }}>Acid Uric</Typography>
           <TextField value={acid}
+                     type="number"
+                     inputProps={{
+                       min:0
+                     }}
                      onChange={event => {
                        setAcid(event.target.value);
                      }} variant="outlined" />
         </Grid>
-      </div>
-      <div style={{ display: 'flex', margin: '5% 10% 0 65%' }}>
-
-        {/*{*/}
-        {/*  glucose == null || hbA1c == null || bilirubinTP == null || bilirubinTT == null || ast == null || alt == null || alp == null || albumin == null || ure == null || creatinin == null || acid == null ?*/}
-        {/*    <Button variant={'contained'} disabled>*/}
-        {/*      Xác Nhận*/}
-        {/*    </Button>*/}
-        {/*    :*/}
-        {/*    <Button variant={'contained'} color="primary" onClick={updateUser}>*/}
-        {/*      Xác Nhận*/}
-        {/*    </Button>*/}
-        {/*}*/}
-        <Button variant={'contained'} color="primary" onClick={updateUser}>
+      </Grid>
+      <div className={classes.actions}>
+        <Button variant={'contained'} color="primary" onClick={updateUser}
+                disabled={loading}
+        >
           Xác Nhận
         </Button>
       </div>
