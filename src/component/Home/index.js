@@ -95,24 +95,28 @@ function Home(props) {
     setSex(value);
     // console.log(`selected ${value}`);
   };
-
+  const parsedFloat = (value = '1') =>{
+    return parseFloat(value).toFixed(1)
+  }
   const updateUser = async () => {
     const user = {
+      name:"",
       age: Number(age || 0),
       height: Number(height || 0),
       weight: Number(weight || 0),
-      gender: Boolean(sex ),
-      glucose: Number(glucose || 0).toFixed(1),
-      hbA1c: Number(hbA1c).toFixed(1),
-      bilirubinTT:Number(bilirubinTT).toFixed(1) ,
-      bilirubinTP: Number(bilirubinTP).toFixed(1),
-      ast: Number(ast).toFixed(1),
-      alt: Number(alt).toFixed(1),
-      alp: Number(alp).toFixed(1),
-      albumin: Number(albumin).toFixed(1),
-      ure: Number(ure).toFixed(1),
-      creatinin: Number(creatinin).toFixed(1),
-      acid: Number(acid).toFixed(1)
+      pregnant:pregnant,
+      gender: sex,
+      glucose: parsedFloat(glucose ),
+      hba1c: parsedFloat(hbA1c),
+      bilirubinTT:parsedFloat(bilirubinTT ) ,
+      bilirubinTP: parsedFloat(bilirubinTP),
+      ast: parsedFloat(ast),
+      alt: parsedFloat(alt),
+      alp: parsedFloat(alp),
+      albumin: parsedFloat(albumin),
+      ure: parsedFloat(ure),
+      creatinin: parsedFloat(creatinin),
+      acidUric: parsedFloat(acid)
     }
 
     try{
