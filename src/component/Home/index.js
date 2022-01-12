@@ -62,8 +62,9 @@ const testData = {
 };
 function Home(props) {
   const classes = useStyles();
-  // const [user] = useGlobal('user');
+
   const [info] = useGlobal('info');
+  const [name, setName] = useState("")
   const [age, setAge] = useState(null);
   const [height, setHeight] = useState(null);
   const [weight, setWeight] = useState(null);
@@ -100,7 +101,7 @@ function Home(props) {
   }
   const updateUser = async () => {
     const user = {
-      name:"",
+      name:name,
       age: Number(age || 0),
       height: Number(height || 0),
       weight: Number(weight || 0),
@@ -140,8 +141,16 @@ function Home(props) {
 
   return (
     <div className={classes.root}>
-      <h2 style={{ textAlign: 'center', fontSize: 30, marginTop: 50, marginBottom: 50 }}>Cập nhật thông tin Cá Nhân</h2>
+      <h2 style={{ textAlign: 'center', fontSize: 30, marginTop: 50, marginBottom: 50 }}>Thông tin cá nhân</h2>
       <Grid container className={classes.body} spacing={2}>
+        <Grid item xs={12} wrap="nowrap" className={classes.gridItem}>
+          <Typography style={{ width: 120 }}>Họ và tên</Typography>
+          <TextField value={name}
+                     type="text"
+                     onChange={event => {
+                       setName(event.target.value);
+                     }} variant="outlined" />
+        </Grid>
         <Grid item xs={12} sm={6} wrap="nowrap" className={classes.gridItem}>
           <Typography style={{ width: 120 }}>Tuổi</Typography>
           <TextField value={age}
