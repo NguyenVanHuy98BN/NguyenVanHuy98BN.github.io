@@ -39,31 +39,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const testData = {
-  'pathologyList': [
-    {
-      'id': 'PATHOLOGY001',
-      'name': 'Tiền tiểu đường',
-      'decription': 'Chắc chắn',
-    },
-  ],
-  'questionList': [
-    {
-      'id': 'QUESTION002',
-      'pathologyId': 'PATHOLOGY001, PATHOLOGY002, PATHOLOGY003, PATHOLOGY004',
-      'content': 'Trong gia đình có người bị bệnh tiểu đường',
-    },
-    {
-      'id': 'QUESTION003',
-      'pathologyId': 'PATHOLOGY001, PATHOLOGY002, PATHOLOGY003, PATHOLOGY004',
-      'content': 'Triệu chứng 4 nhiều: ăn nhiều, khát nhiều, gầy nhiều, tiểu nhiều',
-    },
-  ],
-};
 function Home(props) {
   const classes = useStyles();
 
-  const [info] = useGlobal('info');
   const [name, setName] = useState("")
   const [age, setAge] = useState(null);
   const [height, setHeight] = useState(null);
@@ -82,19 +60,11 @@ function Home(props) {
   const [acid, setAcid] = useState(null);
   const [pregnant, setPregnant] = useState(false);
   const [loading ,setLoading] = useState(false)
-  // const [userInfo, setUserInfo] = useState( [
-  //   {label :"", value: null, type: 'number',id:'age'},
-  //   {label :"", value: null,type: 'number',id:'height'},
-  //   {label :"", value: null,type: 'number',id:'weight'},
-  //   {label :"", value: null, type :'select', id:'sex',options:[{value:'male', label:'nam'},{value:'female', label:'nữ'}]},
-  //   {label :"", value: null,type :'select',id:'pregnant', options:[{value: true, label:'có'},{value:false, label:'không'}],condition:{sex:"female"}}
-  // ])
-  //
+
   const history = useHistory();
 
   const handleChange = (value) => {
     setSex(value);
-    // console.log(`selected ${value}`);
   };
   const parsedFloat = (value = '1') =>{
     return parseFloat(value).toFixed(1)
@@ -129,7 +99,6 @@ function Home(props) {
         user
       })
 
-      // info.push(user)
       history.push('/account');
     }catch (e){
       console.log(e);
@@ -221,7 +190,7 @@ function Home(props) {
           </Grid>
         }
       </div>
-      <h3 style={{ textAlign: 'center', fontSize: 22, marginTop: 40 }}>Chỉ số sinh hóa</h3>
+      <h3 style={{ textAlign: 'center', fontSize: 22, marginTop: 40 }}>Kết quả xét nghiệm các chỉ số sinh hóa máu:</h3>
       <Grid container className={classes.body} spacing={2}>
         <Grid item xs={12} sm={4}  >
           <Typography style={{ width: 120 }}>Glucose</Typography>
@@ -229,6 +198,9 @@ function Home(props) {
                      type="number"
                      inputProps={{
                        min:0
+                     }}
+                     InputProps={{
+                       endAdornment: <InputAdornment position="end">mmol/L</InputAdornment>,
                      }}
                      onChange={event => {
                        setGlucose(event.target.value);
@@ -241,6 +213,9 @@ function Home(props) {
                      inputProps={{
                        min:0
                      }}
+                     InputProps={{
+                       endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                     }}
                      onChange={event => {
                        setHbA1c(event.target.value);
                      }} variant="outlined" />
@@ -251,6 +226,9 @@ function Home(props) {
                      type="number"
                      inputProps={{
                        min:0
+                     }}
+                     InputProps={{
+                       endAdornment: <InputAdornment position="end">µmol/</InputAdornment>,
                      }}
                      onChange={event => {
                        setBilirubinTT(event.target.value);
@@ -265,6 +243,9 @@ function Home(props) {
                      inputProps={{
                        min:0
                      }}
+                     InputProps={{
+                       endAdornment: <InputAdornment position="end">µmol/</InputAdornment>,
+                     }}
                      onChange={event => {
                        setBilirubinTP(event.target.value);
                      }} variant="outlined" />
@@ -276,6 +257,9 @@ function Home(props) {
                      inputProps={{
                        min:0
                      }}
+                     InputProps={{
+                       endAdornment: <InputAdornment position="end">U/L</InputAdornment>,
+                     }}
                      onChange={event => {
                        setAst(event.target.value);
                      }} variant="outlined" />
@@ -286,6 +270,9 @@ function Home(props) {
                      type="number"
                      inputProps={{
                        min:0
+                     }}
+                     InputProps={{
+                       endAdornment: <InputAdornment position="end">U/L</InputAdornment>,
                      }}
                      onChange={event => {
                        setAlt(event.target.value);
@@ -300,6 +287,9 @@ function Home(props) {
                      inputProps={{
                        min:0
                      }}
+                     InputProps={{
+                       endAdornment: <InputAdornment position="end">g/L</InputAdornment>,
+                     }}
                      onChange={event => {
                        setAlbumin(event.target.value);
                      }} variant="outlined" />
@@ -311,6 +301,9 @@ function Home(props) {
                      inputProps={{
                        min:0
                      }}
+                     InputProps={{
+                       endAdornment: <InputAdornment position="end">U/L</InputAdornment>,
+                     }}
                      onChange={event => {
                        setAlp(event.target.value);
                      }} variant="outlined" />
@@ -321,6 +314,9 @@ function Home(props) {
                      type="number"
                      inputProps={{
                        min:0
+                     }}
+                     InputProps={{
+                       endAdornment: <InputAdornment position="end">mmol/l</InputAdornment>,
                      }}
                      onChange={event => {
                        setUre(event.target.value);
@@ -335,6 +331,9 @@ function Home(props) {
                      inputProps={{
                        min:0
                      }}
+                     InputProps={{
+                       endAdornment: <InputAdornment position="end">µmol/l</InputAdornment>,
+                     }}
                      onChange={event => {
                        setCreatinin(event.target.value);
                      }} variant="outlined" />
@@ -345,6 +344,9 @@ function Home(props) {
                      type="number"
                      inputProps={{
                        min:0
+                     }}
+                     InputProps={{
+                       endAdornment: <InputAdornment position="end">mg/dL</InputAdornment>,
                      }}
                      onChange={event => {
                        setAcid(event.target.value);
