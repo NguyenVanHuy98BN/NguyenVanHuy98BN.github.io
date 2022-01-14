@@ -27,9 +27,9 @@ function Account(props) {
     <div style={{ backgroundColor: '#f5f5f5', padding: 50 }}>
       <Typography style={{fontSize: 22, fontWeight: "bold", paddingTop: 20}}>Hồ sơ bệnh án</Typography>
       <Typography style={{fontSize: 15}}>Họ và tên: {user.name}</Typography>
-      <Typography style={{fontSize: 15}}>Tuổi: {user.name}</Typography>
-      <Typography style={{fontSize: 15}}>Chiều cao: {user.name} cm</Typography>
-      <Typography style={{fontSize: 15}}>Cân nặng: {user.name} kg</Typography>
+      <Typography style={{fontSize: 15}}>Tuổi: {user.age}</Typography>
+      <Typography style={{fontSize: 15}}>Chiều cao: {user.height} cm</Typography>
+      <Typography style={{fontSize: 15}}>Cân nặng: {user.weight} kg</Typography>
 
       <hr/>
 
