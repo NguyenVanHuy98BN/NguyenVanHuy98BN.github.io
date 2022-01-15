@@ -96,7 +96,8 @@ function Home(props) {
       const { data } = await axios.post('http://localhost:8080/blood-biochemistry-test/first-process',user)
       setGlobal({
         data: data,
-        user
+        user,
+        creatinin: creatinin
       })
 
       history.push('/account');

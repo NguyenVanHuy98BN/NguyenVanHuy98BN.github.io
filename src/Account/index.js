@@ -49,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
 function Account(props) {
   const [data, setData] = useGlobal('data');
   const [user] = useGlobal('user');
+  const [creatinin] = useGlobal('creatinin');
   const history = useHistory();
   const classes = useStyles()
   const [loading, setLoading] = useState(false);
@@ -66,6 +67,7 @@ function Account(props) {
         'pregnant': user.pregnant,
         'weight': user.weight,
         'height': user.height,
+        'creatinin': creatinin,
         'pathologyList': data.pathologyList.map(item => ({ id: item.id })),
         'questionSecondProcesses': data.questionList.map(item => ({ id: item.id, result: item.answer === 'yes' })),
       };

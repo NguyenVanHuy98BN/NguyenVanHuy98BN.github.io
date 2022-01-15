@@ -8,5 +8,6 @@ setGlobal({
   user: {},
   info: [],
   data:null,
-  adviceList:[]
+  adviceList:[],
+  creatinin: null
 });
