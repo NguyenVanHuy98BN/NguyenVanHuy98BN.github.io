@@ -182,7 +182,7 @@ function Account(props) {
         {
           (!isNormal() && !isError()) &&
           <Button color="primary" onClick={updateUser}
-                  disabled={loading || !data.questionList?.length}
+                  disabled={loading}
           >
             Cập Nhật
           </Button>
